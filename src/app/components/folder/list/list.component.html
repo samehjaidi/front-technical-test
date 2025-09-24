@@ -1,1 +1,28 @@
-<p>list works!</p>
+<div class="file-manager-container p-6 border rounded-lg bg-white shadow-lg w-full max-w-5xl mx-auto my-8">
+	<div class="flex justify-between items-center mb-6 flex-wrap gap-4">
+		<div class="flex items-center gap-2">
+			<mat-icon class="text-blue-500 text-3xl">folder</mat-icon>
+			<h2 class="text-2xl font-bold text-gray-700">File Manager</h2>
+		</div>
+		<div class="flex gap-2 flex-wrap">
+			<button (click)="onCreateFolder()"
+				class="w-14 h-14 flex items-center justify-center rounded-lg border border-green-500 text-green-600 hover:bg-green-100 transition focus:outline-none focus:ring-2 focus:ring-green-500">
+				<mat-icon class="text-2xl">create_new_folder</mat-icon>
+			</button>
+		</div>
+	</div>
+	<div class="grid grid-cols-2 sm:grid-cols-3 md:grid-cols-4 lg:grid-cols-5 gap-4">
+		@for (folder of folders; track folder.id) {
+		<div
+			class="p-4 border rounded-lg shadow-sm bg-gray-50 flex flex-col items-center justify-center cursor-pointer transition transform hover:scale-105 group relative overflow-hidden">
+			<div (click)="onFolderClick(folder)" class="flex flex-col items-center gap-2 w-full h-full justify-center">
+				<mat-icon class="text-blue-500 text-5xl mb-2">folder</mat-icon>
+				<span class="truncate font-medium text-blue-600 text-center w-full">{{ folder.name }}</span>
+			</div>
+	
+		</div>
+		} @empty {
+		<p class="text-gray-500 text-center col-span-full mt-6">No folders found.</p>
+		}
+	</div>
+</div>

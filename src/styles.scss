@@ -1,11 +1,11 @@
-html,
+
+@use '@angular/material' as mat;
+@use 'tailwindcss' as *;
+$primary-color: #1a202c;
 body {
 	height: 100%;
 }
-
 body {
-	display: flex;
-	align-items: center;
-	justify-content: center;
-	font-size: 30px;
+	font-family: system-ui, sans-serif;
+	color: $primary-color;
 }

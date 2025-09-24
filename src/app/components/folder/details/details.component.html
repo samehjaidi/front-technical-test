@@ -1,1 +1,9 @@
-<p>details works!</p>
+<div class="flex justify-between items-center mb-6 flex-wrap gap-3">
+	<div class="flex items-center">
+		<mat-icon class="text-2xl sm:text-3xl mr-2">insert_drive_file</mat-icon>
+		<h2 class="text-2xl font-bold text-gray-800">{{ folderName$ | async }}</h2>
+	</div>
+
+</div>
+
+<ic-list [folderId]="folderId"></ic-list>

@@ -1,1 +1,32 @@
-<p>list works!</p>
+<div class="file-manager-container p-4 sm:p-6 bg-white rounded-lg shadow-lg w-full max-w-5xl mx-auto">
+	<div class="flex justify-between items-center mb-4 flex-wrap gap-2">
+		<label
+			class="w-12 h-12 sm:w-14 sm:h-14 flex items-center justify-center rounded-lg border border-red-500 text-red-500 hover:bg-red-100 cursor-pointer transition">
+			<mat-icon class="text-2xl sm:text-3xl">upload</mat-icon>
+
+			<input type="file" multiple (change)="onUpload($event)" hidden />
+		</label>
+	</div>
+
+	<div *ngIf="items$ | async as items; else noFiles">
+		<div *ngIf="items.length > 0; else noFiles"
+			class="grid grid-cols-1 sm:grid-cols-2 md:grid-cols-3 lg:grid-cols-4 gap-4 mt-6 sm:mt-10">
+			<div *ngFor="let item of items"
+				class="p-4 border rounded-lg shadow-sm hover:shadow-md bg-gray-50 flex flex-col justify-between">
+				<div class="flex items-center gap-2 cursor-pointer truncate">
+					<mat-icon class="text-2xl sm:text-4xl" [ngClass]="item.folder ? 'text-blue-500' : 'text-gray-500'">
+						{{ item.folder ? 'folder' : 'insert_drive_file' }}
+					</mat-icon>
+					<span class="truncate font-medium text-sm sm:text-base"
+						[ngClass]="item.folder ? 'text-blue-600' : 'text-gray-700'">
+						{{ item.name }}
+					</span>
+				</div>
+			</div>
+		</div>
+	</div>
+	<ng-template #noFiles>
+		<p class="text-gray-500 text-center mt-6 sm:mt-10">No files found in this folder.</p>
+	</ng-template>
+
+</div>
