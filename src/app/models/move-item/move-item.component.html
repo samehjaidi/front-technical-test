@@ -1,0 +1,32 @@
+<div class="flex justify-between px-3 items-center my-5">
+	<h2 class="text-xl font-semibold  text-primary-500 px-0">
+		Select folder
+	</h2>
+	<button mat-icon-button aria-label="close dialog" mat-dialog-close class="text-primary-500">
+		<mat-icon>close</mat-icon>
+	</button>
+
+</div>
+<div class="px-8">
+	<ul class="flex flex-col gap-2">
+		<li *ngFor="let folder of folders$ | async" (click)="selectFolder(folder)"
+			[class.bg-blue-100]="folder.id === selectedFolderId"
+			class="flex items-center justify-between p-3 border rounded-md cursor-pointer hover:bg-blue-50 transition">
+
+			<span class="flex items-center gap-2">
+				<mat-icon class="text-blue-500">folder</mat-icon>
+				{{ folder.name }}
+			</span>
+			<mat-icon *ngIf="folder.id === selectedFolderId" class="text-blue-600">check_circle</mat-icon>
+		</li>
+	</ul>
+
+
+	<div class="my-6 flex justify-end gap-2">
+		<button type="submit" class="justify-center rounded-md  bg-green-500 px-4 py-2" [disabled]="!selectedFolderId"
+			(click)="move()">
+			Move
+		</button>
+
+	</div>
+</div>

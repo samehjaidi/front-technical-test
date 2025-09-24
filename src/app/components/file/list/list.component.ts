@@ -10,6 +10,13 @@ import { MatDialog } from '@angular/material/dialog';
 import { Location } from "@angular/common";
 import { EditItemComponent } from '../../modal/edit-item/edit-item.component';
 import { SwalService } from '../../../services/swal.service';
+import { MoveItemComponent } from '../../../models/move-item/move-item.component';
+const ALLOWED_FILE_TYPES = [
+  'image/jpeg',
+  'image/png',
+  'image/svg+xml',
+  'application/pdf'
+];
 @Component({
   selector: 'ic-list',
   standalone: true,
@@ -17,12 +24,14 @@ import { SwalService } from '../../../services/swal.service';
   templateUrl: './list.component.html',
   styleUrl: './list.component.scss'
 })
+
+
 export class ListComponent {
   @ViewChild('fileInput', { static: false }) fileInput!: ElementRef;
   items$!: Observable<FileItem[]>;
   currentParentId: string | null = null;
   @Input() folderId!: string;
-
+  allowedFileTypes = ALLOWED_FILE_TYPES;
 
   isUploading = false;
   fileUrl!: string | null;
@@ -50,7 +59,6 @@ export class ListComponent {
   }
 
   loadItems(parentId: string | null) {
-    console.log('Loading items for folder ID:', parentId);
     this.items$ = this.fileService.loadItems(parentId);
   }
   handleChange(event: any) {
@@ -122,18 +130,6 @@ export class ListComponent {
     });
   }
 
-
-
-
-
-
-
-
-
-
-
-
-
   onDownload(item: FileItem) {
     if (!item.folder) {
       this.fileService.downloadFile(item.id).subscribe({
@@ -151,12 +147,7 @@ export class ListComponent {
   }
 
 
-  handleRemovesFile() {
-    if (this.fileInput && this.fileInput.nativeElement) {
-      this.fileInput.nativeElement.value = null;
 
-    }
-  }
   handleUploadFile() {
     if (!this.uploadFile) return;
     this.isUploading = true;
@@ -167,15 +158,34 @@ export class ListComponent {
     this.fileService.uploadFiles(formData, this.currentParentId).subscribe({
       next: () => {
         this.isUploading = false;
-        this.snackBar.open('File uploaded successfully', 'Close');
-        this.loadItems(this.currentParentId);
+        this.swalService.successAlert('Uploaded!', `"${this.uploadFile?.name}" has been uploaded.`);
         this.handleRemovesFile();
+        this.uploadFile = null;
+
+        this.loadItems(this.currentParentId);
       },
       error: err => {
         this.isUploading = false;
-        this.snackBar.open(err.error?.desc || err.message, 'Close');
+        this.swalService.errorAlert('Error', err.error?.desc || err.message);
       }
     });
   }
 
+  handleRemovesFile() {
+    if (this.fileInput && this.fileInput.nativeElement) {
+      this.fileInput.nativeElement.value = null;
+    }
+  }
+  onMove(item: FileItem) {
+    const dialogRef = this.dialog.open(MoveItemComponent, { width: '400px', data: { currentItem: item } });
+
+    dialogRef.afterClosed().subscribe(targetFolderId => {
+      if (targetFolderId && targetFolderId !== item.parentId) {
+        this.fileService.moveItem(item.id, item.parentId, targetFolderId).subscribe({
+          next: () => this.loadItems(this.currentParentId),
+          error: err => this.snackBar.open(err.error?.desc || err.message, 'Close')
+        });
+      }
+    });
+  }
 }

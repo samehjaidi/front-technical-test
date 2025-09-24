@@ -4,6 +4,8 @@
 		<h2 class="text-2xl font-bold text-gray-800">{{ folderName$ | async }}</h2>
 	</div>
 
+	<mat-icon class="mx-2 text-xl sm:text-2xl text-primary-500 cursor-pointer" (click)="goBack()">
+		arrow_back
+	</mat-icon>
 </div>
-
 <ic-list [folderId]="folderId"></ic-list>

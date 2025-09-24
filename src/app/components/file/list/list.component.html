@@ -9,6 +9,39 @@
 
 
 	</div>
+	<div
+		class="flex flex-col items-center justify-center p-4 sm:p-6 bg-gray-50 min-h-[300px] sm:min-h-[400px] rounded-xl shadow-lg">
+
+		<div
+			class="relative w-full max-w-md h-40 sm:h-52 border-4 border-dashed border-gray-400 rounded-xl flex flex-col items-center justify-center cursor-pointer hover:bg-gray-100 transition">
+			<input #fileInput type="file" (change)="handleChange($event)" [accept]="allowedFileTypes"
+				class="absolute w-full h-full opacity-0 cursor-pointer top-0 left-0" />
+
+			<p class="text-center text-gray-600 px-2 sm:px-4 text-base">Drag your file here or click to browse</p>
+
+			<button type="button" (click)="fileInput.click()"
+				class="mt-3 sm:mt-4 px-4 sm:px-6 py-2 bg-green-500  text-base text-white font-medium rounded-lg hover:bg-green-600">
+				Select file
+			</button>
+		</div>
+
+		<div *ngIf="uploadFile" class="mt-4 flex flex-col items-center gap-2">
+			<p class="truncate max-w-xs sm:max-w-sm text-center">{{ uploadFile.name }}</p>
+
+			<div class="flex flex-col sm:flex-row gap-2">
+				<button type="button" [disabled]="isUploading" (click)="handleUploadFile()"
+					class="px-4 py-2 bg-blue-500 text-white rounded-lg hover:bg-blue-600 disabled:bg-gray-300">
+					{{ isUploading ? 'Uploading...' : 'Upload' }}
+				</button>
+
+				<button type="button" [disabled]="isUploading" (click)="handleRemovesFile()"
+					class="px-4 py-2 bg-red-500 text-white rounded-lg hover:bg-red-600 disabled:bg-gray-300">
+					Remove
+				</button>
+
+			</div>
+		</div>
+	</div>
 	<!-- File List -->
 	<div class="grid grid-cols-1 sm:grid-cols-2 md:grid-cols-3 lg:grid-cols-4 gap-4 mt-6 sm:mt-10">
 		@for (item of items$ | async; track item.id) {
@@ -42,6 +75,10 @@
 				<button (click)="onDelete(item)"
 					class="w-10 h-10 sm:w-12 sm:h-12 flex items-center justify-center rounded-lg border border-red-500 text-red-500 hover:bg-red-100 transition">
 					<mat-icon>delete</mat-icon>
+				</button>
+				<button (click)="onMove(item)"
+					class="w-10 h-10 sm:w-12 sm:h-12 flex items-center justify-center rounded-lg border border-purple-500 text-purple-500 hover:bg-purple-100 transition">
+					<mat-icon>drive_file_move</mat-icon>
 				</button>
 			</div>
 		</div>

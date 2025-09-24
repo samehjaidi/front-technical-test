@@ -32,7 +32,7 @@ export class FileService {
     return this.http.get(`${this.apiUrl}/${id}`, { responseType: 'blob' });
   }
 
-    renameItem(id: string, newName: string, parentId?: string | null): Observable<FileItem> {
+  renameItem(id: string, newName: string, parentId?: string | null): Observable<FileItem> {
     const body = { name: newName };
     return this.http.patch<FileItem>(`${this.apiUrl}/${id}`, body);
   }
@@ -40,4 +40,9 @@ export class FileService {
   deleteItem(id: string): Observable<void> {
     return this.http.delete<void>(`${this.apiUrl}/${id}`);
   }
+
+  moveItem(itemId: string, parentId: string | null, targetId: string | null) {
+    return this.http.patch(`/api/items/${itemId}`, { parentId: targetId });
+  }
+
 }

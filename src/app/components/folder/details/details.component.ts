@@ -4,11 +4,11 @@ import { FileService } from '../../../services/file.service';
 import { BehaviorSubject, map } from 'rxjs';
 import { ListComponent } from '../../file/list/list.component';
 import { SharedModules } from '../../../shared/shared-module';
-import { CommonModule } from '@angular/common';
 
+import { Location } from "@angular/common";
 @Component({
   selector: 'ic-details',
-  imports: [CommonModule, ListComponent, SharedModules],
+  imports: [ListComponent, SharedModules],
   templateUrl: './details.component.html',
   styleUrl: './details.component.scss'
 })
@@ -18,7 +18,7 @@ export class DetailsComponent {
 
   constructor(private route: ActivatedRoute,
     private fileService: FileService,
-) { }
+    private location: Location) { }
 
   ngOnInit() {
     this.folderId = this.route.snapshot.params['id'];
@@ -27,5 +27,8 @@ export class DetailsComponent {
       const folder = items.find(i => i.id === this.folderId);
       this.folderName$.next(folder ? folder.name : this.folderId);
     });
+  }
+  goBack() {
+    this.location.back();
   }
 }

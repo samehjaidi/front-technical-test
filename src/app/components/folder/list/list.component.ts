@@ -35,8 +35,6 @@ export class ListComponent implements OnInit {
     this.fileService.loadItems(null).subscribe((items) => {
       this.items = items;
       this.folders = items.filter(i => i.folder);
-      console.log('folders', this.folders);
-      console.log('all items', this.items);
     });
   }
   onCreateFolder() {
