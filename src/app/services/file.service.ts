@@ -31,4 +31,13 @@ export class FileService {
   downloadFile(id: string): Observable<Blob> {
     return this.http.get(`${this.apiUrl}/${id}`, { responseType: 'blob' });
   }
+
+    renameItem(id: string, newName: string, parentId?: string | null): Observable<FileItem> {
+    const body = { name: newName };
+    return this.http.patch<FileItem>(`${this.apiUrl}/${id}`, body);
+  }
+
+  deleteItem(id: string): Observable<void> {
+    return this.http.delete<void>(`${this.apiUrl}/${id}`);
+  }
 }

@@ -18,7 +18,7 @@
 
 		<div class="my-6 flex justify-end gap-2">
 			<button type="submit" class="justify-center rounded-md  bg-green-500 px-4 py-2">
-				create
+				{{ data.mode === 'edit' ? 'Save' : 'Create' }}
 			</button>
 		</div>
 	</form>

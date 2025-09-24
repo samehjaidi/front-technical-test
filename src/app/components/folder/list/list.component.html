@@ -1,28 +1,64 @@
-<div class="file-manager-container p-6 border rounded-lg bg-white shadow-lg w-full max-w-5xl mx-auto my-8">
-	<div class="flex justify-between items-center mb-6 flex-wrap gap-4">
-		<div class="flex items-center gap-2">
-			<mat-icon class="text-blue-500 text-3xl">folder</mat-icon>
-			<h2 class="text-2xl font-bold text-gray-700">File Manager</h2>
+<div class="file-manager-container p-6 border rounded-xl bg-white shadow-xl w-full mx-auto my-6">
+
+	<!-- Header -->
+	<div class="flex justify-between items-center mb-6 flex-wrap gap-3">
+		<div class="flex items-center gap-3">
+			<mat-icon class="text-blue-500 text-4xl">folder_open</mat-icon>
+			<h2 class="text-2xl font-bold text-gray-800">My Folders</h2>
 		</div>
-		<div class="flex gap-2 flex-wrap">
-			<button (click)="onCreateFolder()"
-				class="w-14 h-14 flex items-center justify-center rounded-lg border border-green-500 text-green-600 hover:bg-green-100 transition focus:outline-none focus:ring-2 focus:ring-green-500">
-				<mat-icon class="text-2xl">create_new_folder</mat-icon>
-			</button>
-		</div>
+
+		<button (click)="onCreateFolder()"
+			class="px-4 py-2 flex items-center gap-2 rounded-lg bg-green-600 text-white hover:bg-green-700 transition">
+			<mat-icon>create_new_folder</mat-icon>
+			<span class="hidden sm:inline">New Folder</span>
+		</button>
 	</div>
-	<div class="grid grid-cols-2 sm:grid-cols-3 md:grid-cols-4 lg:grid-cols-5 gap-4">
-		@for (folder of folders; track folder.id) {
-		<div
-			class="p-4 border rounded-lg shadow-sm bg-gray-50 flex flex-col items-center justify-center cursor-pointer transition transform hover:scale-105 group relative overflow-hidden">
-			<div (click)="onFolderClick(folder)" class="flex flex-col items-center gap-2 w-full h-full justify-center">
-				<mat-icon class="text-blue-500 text-5xl mb-2">folder</mat-icon>
-				<span class="truncate font-medium text-blue-600 text-center w-full">{{ folder.name }}</span>
-			</div>
-	
-		</div>
-		} @empty {
-		<p class="text-gray-500 text-center col-span-full mt-6">No folders found.</p>
-		}
+
+	<!-- Folder List (Table style) -->
+	<div class="overflow-x-auto">
+		<table class="w-full border-collapse">
+			<thead>
+				<tr class="bg-gray-100 text-gray-700 text-left text-sm sm:text-base">
+					<th class="p-3 font-semibold">Name</th>
+					<th class="p-3 font-semibold hidden sm:table-cell">CreatedAt</th>
+					<th class="p-3 font-semibold hidden md:table-cell">ModifitedAt</th>
+					<th class="p-3 font-semibold hidden md:table-cell">Files</th>
+					<th class="p-3 font-semibold text-center">Actions</th>
+				</tr>
+			</thead>
+			<tbody>
+				@for (folder of folders; track folder.id) {
+				<tr class="border-b hover:bg-gray-50 cursor-pointer transition">
+					<td class="p-3 flex items-center gap-2 font-medium text-gray-700">
+						<mat-icon class="text-blue-500">folder</mat-icon>
+						{{ folder.name }}
+					</td>
+					<td class="p-3 text-gray-500 hidden sm:table-cell">{{ folder.creation| date:'short' }}</td>
+					<td class="p-3 text-gray-500 hidden md:table-cell">{{ folder.modification| date:'short' }}</td>
+					<td class="p-3 text-gray-500 hidden md:table-cell text-center">
+						{{ getFilesCount(folder.id) }}
+					</td>
+					<td class="p-3 text-center flex gap-2 justify-center">
+						<button (click)="onViewFiles(folder); $event.stopPropagation()"
+							class="p-2 rounded hover:bg-blue-100 text-blue-600">
+							<mat-icon>list</mat-icon>
+						</button>
+						<button (click)="onRename(folder); $event.stopPropagation()"
+							class="p-2 rounded hover:bg-yellow-100 text-yellow-600">
+							<mat-icon>edit</mat-icon>
+						</button>
+						<button (click)="onDelete(folder); $event.stopPropagation()"
+							class="p-2 rounded hover:bg-red-100 text-red-600">
+							<mat-icon>delete</mat-icon>
+						</button>
+					</td>
+				</tr>
+				} @empty {
+				<tr>
+					<td colspan="4" class="text-center text-gray-500 py-6">No folders found.</td>
+				</tr>
+				}
+			</tbody>
+		</table>
 	</div>
 </div>

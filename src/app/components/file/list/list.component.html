@@ -6,27 +6,50 @@
 
 			<input type="file" multiple (change)="onUpload($event)" hidden />
 		</label>
-	</div>
 
-	<div *ngIf="items$ | async as items; else noFiles">
-		<div *ngIf="items.length > 0; else noFiles"
-			class="grid grid-cols-1 sm:grid-cols-2 md:grid-cols-3 lg:grid-cols-4 gap-4 mt-6 sm:mt-10">
-			<div *ngFor="let item of items"
-				class="p-4 border rounded-lg shadow-sm hover:shadow-md bg-gray-50 flex flex-col justify-between">
-				<div class="flex items-center gap-2 cursor-pointer truncate">
-					<mat-icon class="text-2xl sm:text-4xl" [ngClass]="item.folder ? 'text-blue-500' : 'text-gray-500'">
-						{{ item.folder ? 'folder' : 'insert_drive_file' }}
-					</mat-icon>
-					<span class="truncate font-medium text-sm sm:text-base"
-						[ngClass]="item.folder ? 'text-blue-600' : 'text-gray-700'">
-						{{ item.name }}
-					</span>
-				</div>
+
+	</div>
+	<!-- File List -->
+	<div class="grid grid-cols-1 sm:grid-cols-2 md:grid-cols-3 lg:grid-cols-4 gap-4 mt-6 sm:mt-10">
+		@for (item of items$ | async; track item.id) {
+		<div class="p-4 border rounded-lg shadow-sm hover:shadow-md bg-gray-50 flex flex-col justify-between">
+
+			<!-- Icon + Name -->
+			<div class="flex items-center gap-2 cursor-pointer truncate">
+				<mat-icon class="text-2xl sm:text-4xl" [ngClass]="item.folder ? 'text-blue-500' : 'text-gray-500'">
+					{{ item.folder ? 'folder' : 'insert_drive_file' }}
+				</mat-icon>
+				<span class="truncate font-medium text-sm sm:text-base"
+					[ngClass]="item.folder ? 'text-blue-600' : 'text-gray-700'">
+					{{ item.name }}
+				</span>
+			</div>
+
+			<!-- Actions -->
+			<div class="flex gap-1 sm:gap-2 mt-3 justify-end ">
+				@if (!item.folder) {
+				<button (click)="onDownload(item)"
+					class="w-10 h-10 sm:w-12 sm:h-12 flex items-center justify-center rounded-lg border border-blue-500 text-blue-500 hover:bg-blue-100 transition">
+					<mat-icon>download</mat-icon>
+				</button>
+				}
+
+				<button (click)="onRename(item)"
+					class="w-10 h-10 sm:w-12 sm:h-12 flex items-center justify-center rounded-lg border border-yellow-500 text-yellow-500 hover:bg-yellow-100 transition">
+					<mat-icon>edit</mat-icon>
+				</button>
+
+				<button (click)="onDelete(item)"
+					class="w-10 h-10 sm:w-12 sm:h-12 flex items-center justify-center rounded-lg border border-red-500 text-red-500 hover:bg-red-100 transition">
+					<mat-icon>delete</mat-icon>
+				</button>
 			</div>
 		</div>
+		} @empty {
+		<p class="text-gray-500 text-center col-span-full mt-6">No files found.</p>
+		}
 	</div>
-	<ng-template #noFiles>
-		<p class="text-gray-500 text-center mt-6 sm:mt-10">No files found in this folder.</p>
-	</ng-template>
+
+
 
 </div>

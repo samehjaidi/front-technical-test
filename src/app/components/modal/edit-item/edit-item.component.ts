@@ -28,10 +28,13 @@ export class EditItemComponent {
       name: [data.name || '', Validators.required],
     });
 
-
+    if (data.mode === 'edit') {
+      this.title = data.type === 'file' ? 'Rename File' : 'Rename Folder';
+      this.placeholder = 'Enter new name';
+    } else {
       this.title = 'Create Folder';
       this.placeholder = 'Enter folder name';
-    
+    }
   }
 
   onSubmit() {
@@ -40,3 +43,4 @@ export class EditItemComponent {
     }
   }
 }
+
